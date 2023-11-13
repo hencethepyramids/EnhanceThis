@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text Summarizer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Text Summarizer</h1>
+    <form id="textForm">
+        <textarea id="text" placeholder="Enter your text here..."></textarea>
+        <button type="button" onclick="summarizeText()">Summarize</button>
+    </form>
+    <div id="summary"></div>
+    <div id="sections"></div>
+    
+    <script>
+        function summarizeText() {
+            const text = document.getElementById('text').value;
+            
+            fetch('/process_text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('summary').innerText = `Summary: ${data.summary}`;
+                document.getElementById('sections').innerText = `Sections: ${JSON.stringify(data.sections)}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle the error, such as displaying a message to the user
+            });
+        }
+    </script>
+</body>
+</html>
